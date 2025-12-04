@@ -22,4 +22,3 @@ for name, p in points.items():
     cluster2.append(name)
 print("Cluster 1:",cluster1)
 print("Cluster 2:",cluster2)
-
