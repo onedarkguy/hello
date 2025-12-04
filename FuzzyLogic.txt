@@ -1,0 +1,12 @@
+def triangular(x, a, b, c ):
+  if x <= a or x >= c :
+    return 0
+  elif x == b:
+    return 1
+  elif x < b:
+    return (x-a)/(b-a)
+  else:
+    return (c-x)/(c-b)
+x=7
+mu =triangular(x,0,0,10)
+print("membership of",x,"=",mu)

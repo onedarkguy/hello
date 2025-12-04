@@ -1,0 +1,61 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score,confusion_matrix, classification_report
+
+
+from matplotlib.colors import ListedColormap
+iris=load_iris()
+df=pd.DataFrame(iris.data,columns=iris.feature_names)
+df['target']=iris.target
+df['species']=df['target'].apply(lambda x:iris.target_names[x])
+
+print(df.info())
+print(df.head())
+print(df['species'].value_counts())
+
+
+plt.figure(figsize=(12,6))
+sns.histplot(df,x="sepal length (cm)",hue="species",kde=True)
+plt.title("Distribution of Sepal Length")
+plt.show()
+
+plt.figure(figsize=(12,6))
+sns.pairplot(df,hue="species",corner=True)
+plt.suptitle("Pairplot of Iris Dataset",y=1.02)
+plt.show()
+
+
+plt.figure(figsize=(12,6))
+sns.heatmap(df.corr(numeric_only=True),annot=True,cmap="coolwarm")
+plt.title("Correlation Heatmap")
+plt.show()
+
+X=df[iris.feature_names]
+y=df['target']
+
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.3,random_state=42)
+model=GaussianNB()
+model.fit(X_train,y_train)
+
+y_pred=model.predict(X_test)
+
+print("Accuracy Score-")
+print(accuracy_score(y_test,y_pred))
+
+print("Confusion Matrix-")
+print(confusion_matrix(y_test,y_pred))
+
+plt.figure(figsize=(6,5))
+sns.heatmap(confusion_matrix(y_test,y_pred),annot=True,fmt="d",cmap="Blues",xticklabels=iris.target_names,yticklabels=iris.target_names)
+plt.title("Confusion Matrix Heatmap")
+plt.xlabel("Predicted Labels")
+plt.ylabel("True Labels")
+plt.show()
+
+print(classification_report(y_test,y_pred))
